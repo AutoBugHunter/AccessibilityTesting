@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
-
+import * as userData from '../data/config.json'
 test('has title', async ({ page }) => {
   await page.goto('https://websiteaccessibilitychecker.com/checker/index.php');
   await expect(page).toHaveTitle('Web Accessibility Checker : Web Accessibility Checker');
-  await page.fill('input#checkuri', 'https://www.w3schools.com/');
+  await page.fill('input#checkuri', userData.baseUrl);
   await page.click('input#validate_uri');
   //await page.click('button#tab-details');
   await page.waitForTimeout(5000);
@@ -46,7 +46,7 @@ test('has title', async ({ page }) => {
 const object = Object.fromEntries(textMap);
 const myJson = JSON.stringify(object); 
 const fs = require('fs').promises;
-fs.writeFile('data1.json', myJson, (err) => {
+fs.writeFile('achecker_data.json', myJson, (err) => {
   if (err) {
       console.error(err);
   } else {

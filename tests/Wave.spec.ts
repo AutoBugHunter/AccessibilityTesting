@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
-
+import * as userData from '../data/config.json'
 test('has title', async ({ page }) => {
   await page.goto('https://wave.webaim.org/');
   await expect(page).toHaveTitle('WAVE Web Accessibility Evaluation Tools');
-  await page.fill('input#input_url', 'https://www.w3schools.com/');
+  await page.fill('input#input_url', userData.baseUrl);
   await page.click('input#button_wave');
   await page.click('button#tab-details');
   await page.waitForTimeout(5000);
@@ -56,7 +56,7 @@ const myJson = JSON.stringify(object);
 const fs = require('fs').promises;
 // const jsonString = JSON.stringify(myJson);
 // console.log(jsonString);
-fs.writeFile('data.json', myJson, (err) => {
+fs.writeFile('wave_data.json', myJson, (err) => {
   if (err) {
       console.error(err);
   } else {
