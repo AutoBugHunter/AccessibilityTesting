@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 //const fetch = require('node-fetch');
 import * as userData from '../data/config.json'
 test('has title', async ({ page }) => {
+  console.log('Lighthouse Start');
   //const fetch = (await import('node-fetch')).default;
   //const fetch = (await import('node-fetch')).default;
   // Now you can use fetch as usual
@@ -9,7 +10,7 @@ test('has title', async ({ page }) => {
   
   // Example assertion or use the fetched data in your test
  
-  const response = await fetch('https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url='+userData.baseUrl+'/&key=AIzaSyDUbvO9MNg6xnaIDvBl-mf6Rqc653BiXQI&category=ACCESSIBILITY');
+  const response = await fetch('https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url='+userData.baseURL+'/&key=AIzaSyDUbvO9MNg6xnaIDvBl-mf6Rqc653BiXQI&category=ACCESSIBILITY');
   const data = await response.json();
   //console.log(data);
 
@@ -54,6 +55,6 @@ test('has title', async ({ page }) => {
       console.log('JSON data saved to data.json');
     }
   });
-
+  console.log('Lighthouse End');
 
 });

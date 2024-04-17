@@ -1,9 +1,10 @@
 import { test, expect } from '@playwright/test';
 import * as userData from '../data/config.json'
 test('has title', async ({ page }) => {
+  console.log('Achecker Start');
   await page.goto('https://websiteaccessibilitychecker.com/checker/index.php');
   await expect(page).toHaveTitle('Web Accessibility Checker : Web Accessibility Checker');
-  await page.fill('input#checkuri', userData.baseUrl);
+  await page.fill('input#checkuri', userData.baseURL);
   await page.click('input#validate_uri');
   //await page.click('button#tab-details');
   await page.waitForTimeout(5000);
@@ -53,4 +54,5 @@ fs.writeFile('achecker_data.json', myJson, (err) => {
       console.log('JSON data saved to data.json');
   }
 });
+console.log('Achecker End');
 });
