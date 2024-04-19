@@ -7,12 +7,8 @@
 <style>
  body {
     background-image: url('https://img.freepik.com/free-vector/simple-blue-gradient-background-vector-business_53876-174922.jpg?size=626&ext=jpg&ga=GA1.1.735520172.1711411200&semt=ais');  /* Replace with your image path */
-    /*background-repeat: no-repeat;  /* Optional: Controls how the image repeats */
-    /*background-position: center;  /* Optional: Positions the image within the element */
-    background-size: cover;      /* Optional: Controls how the image fits the element */
+    background-size: cover;      
   }
-  /*<meta name="viewport" content="width=device-width, initial-scale=1.0">*/
-
   table {
     width: 100%;
     border-collapse: collapse;
@@ -28,7 +24,6 @@
   h1 {
     text-align: center;
   }
- 
   h2 {
     text-align: center;
   }
@@ -47,8 +42,6 @@
 <input id="urlChecker" class="wide-input" placeholder="Enter Url for Accessibility Check" >
 <label>&nbsp;&nbsp;&nbsp;</label>
 <button id="runNpmBtn" onclick="storeText()">Check It</button>
-<!-- <button id="runNpmBtn">Check It</button> -->
-<div id="displayText"></div>
 <br>
 <br>
 <table id='table001'>
@@ -59,45 +52,13 @@
     <th>Lighthouse</th>
     <th>Details</th>
   </tr>
-  <!-- <tr>
-    <td id='key001'>Result</td>
-    <td>Result</td>
-    <td>Result</td>
-    <td>Result</td>
-    <td>Result</td>
-  </tr>
-  <tr>
-    <td id='key002'>Result</td>
-    <td>Result</td>
-    <td>Result</td>
-    <td>Result</td>
-    <td>Result</td>
-  </tr>
-  <tr>
-    <td id='key003'>Result</td>
-    <td>Result</td>
-    <td>Result</td>
-    <td>Result</td>
-    <td>Result</td>
-  </tr>
-  <tr>
-    <td id='key004'>Result</td>
-    <td>Result</td>
-    <td>Result</td>
-    <td>Result</td>
-    <td>Result</td>
-  </tr> -->
-
-  
-  <!-- Add more rows here as needed -->
+ 
 </table>
 
 <script>
     let myMap = new Map();
     let rowCount = 1;
     document.getElementById('runNpmBtn').addEventListener('click', function() {
-            //console.log("Check It Amit");
-            
             fetch('http://localhost:5500/npm')
                 .then(response => response.json())
                 .then(data => console.log(data))
@@ -105,7 +66,6 @@
         });
     function storeText() {
       var inputText = document.getElementById("urlChecker").value;
-      document.getElementById("displayText").innerText = inputText;
       fetch('http://localhost:5500/update-json', {
         method: 'POST',
         headers: {
@@ -127,42 +87,14 @@
             }
             
         }
-
-
-    function fetchWithTimeout(resource, options) {
-          const { timeout = 500000 } = options;
-
-          const controller = new AbortController();
-          const id = setTimeout(() => controller.abort(), timeout);
-
-          return fetch(resource, {
-              ...options,
-              signal: controller.signal
-          })
-          .then(response => {
-              clearTimeout(id);
-              return response;
-          })
-          .catch(error => {
-              clearTimeout(id);
-              throw error;
-          });
-    }
     function fetchData(){
     fetch('wave_data.json')
         .then(response => response.json())
         .then(data => {
-          
             const keys = Object.keys(data);
-            // document.getElementById('key001').innerText=keys[0];
-            // document.getElementById('key002').innerText=keys[1];
-            // document.getElementById('key003').innerText=keys[2];
-            // document.getElementById('key004').innerText=keys[3];
             const table = document.getElementById('table001').getElementsByTagName('tbody')[0];
-            // // Assuming each key in the JSON object is an array of string items
             Object.keys(data).forEach(key => {
                     myMap.set(key, rowCount);
-                // data[key].forEach(item => {
                     const row = table.insertRow();
                     const cell = row.insertCell();
                     const cell1 = row.insertCell();
@@ -172,8 +104,12 @@
                     cell1.setAttribute('data-id', key+' wave');
                     cell2.setAttribute('data-id', key+' achecker');
                     cell3.setAttribute('data-id', key+' lighthouse');
-                    cell.innerText = key;
-                    //cell1.innerText = data[key]; // Using innerHTML to render the HTML content
+                    if(key=='Very low contrast'){
+                      cell.innerText = 'Contrast Issue';
+                    }
+                    else{
+                      cell.innerText = key;
+                    }
                     cell1.innerText = data[key].length;
                     cell2.innerText = 0;
                     cell3.innerText = 0;
@@ -197,11 +133,8 @@
                     newCell2.setAttribute('data-id', 'new cell '+key+' achecker');
                     newCell3.setAttribute('data-id', 'new cell '+key+' lighthouse');
                     newCell1.innerText= data[key];
-                    
                     table.appendChild(newRow);
-                    
                     rowCount++;
-                // });
             });
             
             
@@ -213,62 +146,56 @@
   fetch('achecker_data.json')
       .then(response => response.json())
       .then(data => {
-          
           const keys = Object.keys(data);
-          // document.getElementById('key001').innerText=keys[0];
-          // document.getElementById('key002').innerText=keys[1];
-          // document.getElementById('key003').innerText=keys[2];
-          // document.getElementById('key004').innerText=keys[3];
           const table = document.getElementById('table001').getElementsByTagName('tbody')[0];
-          // // Assuming each key in the JSON object is an array of string items
+          let countContrast =0;
           Object.keys(data).forEach(key => {
-              // data[key].forEach(item => {
                   let flag = false;
                   for (let index = 0; index < table.rows.length; index++) {
-                    let errorName=table.rows[index].cells[0].innerHTML;
-                    
+                    let errorName=table.rows[index].cells[0].innerHTML;  
                     if(myMap.get('Missing alternative text')!=undefined){
                       if(key == 'img element missing alt attribute.') {
-                          // if(table.rows[myMap.get('Missing alternative text')].getAttribute('class')=='details'){
-                          //   table.rows[myMap.get('Missing alternative text')+1].cells[2].innerText = data[key].length;
-                          //   table.rows[myMap.get('Missing alternative text')+2].cells[2].innerText = data[key];
-                          // }
-                          // else{
-                          //   table.rows[myMap.get('Missing alternative text')].cells[2].innerText = data[key].length;
-                          //   table.rows[myMap.get('Missing alternative text')+1].cells[2].innerText = data[key];
-                          // }
-                          //table.rows[myMap.get('Missing alternative text')].cells[2].innerText = data[key].length;
-                          //table.rows[myMap.get('Missing alternative text')+1].cells[2].innerText = data[key];
-                          // console.log("Outside");
                           const existing_cell = document.querySelector('td[data-id="Missing alternative text achecker"]');  
                           const existing_cell1 = document.querySelector('td[data-id="new cell Missing alternative text achecker"]'); 
-
-                          // row.cells[2].innerText = data[key];
                           existing_cell.innerText = data[key].length;
                           existing_cell1.innerText = data[key];
-                          
                           flag=true;
                           break;
                       }
                     }
                     if(myMap.get('Missing form label')!=undefined){
                       if(key.includes('missing an associated label.')) {
-                          //table.rows[myMap.get('Missing form label')].cells[2].innerText = data[key];
-                          // if(table.rows[myMap.get('Missing form label')].getAttribute('class')=='details'){
-                          //   table.rows[myMap.get('Missing form label')+1].cells[2].innerText = data[key].length;
-                          //   table.rows[myMap.get('Missing form label')+2].cells[2].innerText = data[key];
-                          // }
-                          // else{
-                          //   table.rows[myMap.get('Missing form label')].cells[2].innerText = data[key].length;
-                          //   table.rows[myMap.get('Missing form label')+1].cells[2].innerText = data[key];
-                          // }
-                          
-                          //table.rows[myMap.get('Missing form label')].cells[2].innerText = data[key].length;
                           const existing_cell = document.querySelector('td[data-id="Missing form label achecker"]'); 
                           const existing_cell1 = document.querySelector('td[data-id="new cell Missing form label achecker"]');  
-                          // row.cells[2].innerText = data[key];
                           existing_cell.innerText = data[key].length;
                           existing_cell1.innerText = data[key];
+                          flag=true;
+                          break;
+                      }
+                    }
+                    if(myMap.get('Empty link')!=undefined){
+                      if(key.includes('Anchor contains no text.')) {
+                          const existing_cell = document.querySelector('td[data-id="Empty link achecker"]'); 
+                          const existing_cell1 = document.querySelector('td[data-id="new cell Empty link achecker"]');  
+                          existing_cell.innerText = data[key].length;
+                          existing_cell1.innerText = data[key];
+                          flag=true;
+                          break;
+                      }
+                    }
+                    if(myMap.get('Very low contrast')!=undefined){
+                      if(key.includes('The contrast between the colour of')) {
+                          countContrast++;
+                          const existing_cell = document.querySelector('td[data-id="Very low contrast achecker"]'); 
+                          const existing_cell1 = document.querySelector('td[data-id="new cell Very low contrast achecker"]');  
+                          if(countContrast>1){
+                            existing_cell.innerText = +existing_cell.innerText + +data[key].length;
+                            existing_cell1.innerText = existing_cell1.innerText + data[key];
+                          }
+                          else{
+                            existing_cell.innerText = data[key].length;
+                            existing_cell1.innerText = data[key];
+                          }
                           flag=true;
                           break;
                       }
@@ -284,9 +211,7 @@
                   const cell2 = row.insertCell();
                   const cell3 = row.insertCell();
                   const cell4 = row.insertCell();
-                  
                   cell.innerText = key;
-                  //cell2.innerText = data[key]; // Using innerHTML to render the HTML content
                   cell2.innerText = data[key].length;
                   cell1.innerText = 0;
                   cell3.innerText = 0;
@@ -309,11 +234,8 @@
                     newCell2.setAttribute('data-id', 'new cell '+key+' achecker');
                     newCell3.setAttribute('data-id', 'new cell '+key+' lighthouse');
                     newCell2.innerText= data[key];
-                    
                     table.appendChild(newRow);
-                    
                     rowCount++;
-              // });
           });
           
       })
@@ -323,35 +245,16 @@
   fetch('lighthouse_data.json')
       .then(response => response.json())
       .then(data => {
-          
           const keys = Object.keys(data);
-          // document.getElementById('key001').innerText=keys[0];
-          // document.getElementById('key002').innerText=keys[1];
-          // document.getElementById('key003').innerText=keys[2];
-          // document.getElementById('key004').innerText=keys[3];
           const table = document.getElementById('table001').getElementsByTagName('tbody')[0];
-          // // Assuming each key in the JSON object is an array of string items
           Object.keys(data).forEach(key => {
-              // data[key].forEach(item => {
                   let flag = false;
                   for (let index = 0; index < table.rows.length; index++) {
                     let errorName=table.rows[index].cells[0].innerHTML;
-                    
                     if(myMap.get('Missing alternative text')!=undefined){
                       if(key == 'Image elements do not have `[alt]` attributes') {
-                          // if(table.rows[myMap.get('Missing alternative text')].getAttribute('class')=='details'){
-                          //   table.rows[myMap.get('Missing alternative text')+1].cells[3].innerText = data[key].length;
-                          //   table.rows[myMap.get('Missing alternative text')+2].cells[3].innerText = data[key];
-                          // }
-                          // else{
-                          //   table.rows[myMap.get('Missing alternative text')].cells[3].innerText = data[key].length;
-                          //   table.rows[myMap.get('Missing alternative text')+!].cells[3].innerText = data[key];
-                          // }
-                          //table.rows[myMap.get('Missing alternative text')].cells[3].innerText = data[key];
-                          //table.rows[myMap.get('Missing alternative text')].cells[3].innerText = data[key].length;
                           const existing_cell = document.querySelector('td[data-id="Missing alternative text lighthouse"]');  
                           const existing_cell1 = document.querySelector('td[data-id="new cell Missing alternative text lighthouse"]');  
-                          // row.cells[2].innerText = data[key];
                           existing_cell.innerText = data[key].length;
                           existing_cell1.innerText = data[key];
                           flag=true;
@@ -360,19 +263,8 @@
                     }
                     if(myMap.get('Empty button')!=undefined){
                       if(key.includes('Buttons do not have an accessible name')) {
-                          // if(table.rows[myMap.get('Empty button')].getAttribute('class')=='details'){
-                          //   table.rows[myMap.get('Empty button')+1].cells[3].innerText = data[key].length;
-                          //   table.rows[myMap.get('Empty button')+2].cells[3].innerText = data[key];
-                          // }
-                          // else{
-                          //   table.rows[myMap.get('Empty button')].cells[3].innerText = data[key].length;
-                          //   table.rows[myMap.get('Empty button')+1].cells[3].innerText = data[key];
-                          // }
-                          //table.rows[myMap.get('Empty button')].cells[3].innerText = data[key];
-                          //table.rows[myMap.get('Empty button')].cells[3].innerText = data[key].length;
                           const existing_cell = document.querySelector('td[data-id="Empty button lighthouse"]');  
                           const existing_cell1 = document.querySelector('td[data-id="new cell Empty button lighthouse"]');  
-                          // row.cells[2].innerText = data[key];
                           existing_cell.innerText = data[key].length;
                           existing_cell1.innerText = data[key];
                           flag=true;
@@ -381,19 +273,8 @@
                     }
                     if(myMap.get('Empty link')!=undefined){
                       if(key.includes('Links do not have a discernible name')) {
-                          // if(table.rows[myMap.get('Empty link')].getAttribute('class')=='details'){
-                          //   table.rows[myMap.get('Empty link')+1].cells[3].innerText = data[key].length;
-                          //   table.rows[myMap.get('Empty link')+2].cells[3].innerText = data[key];
-                          // }
-                          // else{
-                          //   table.rows[myMap.get('Empty link')].cells[3].innerText = data[key].length;
-                          //   table.rows[myMap.get('Empty link')+1].cells[3].innerText = data[key];
-                          // }
-                          //table.rows[myMap.get('Empty link')].cells[3].innerText = data[key];
-                          //table.rows[myMap.get('Empty link')].cells[3].innerText = data[key].length;
                           const existing_cell = document.querySelector('td[data-id="Empty link lighthouse"]');  
                           const existing_cell1 = document.querySelector('td[data-id="new cell Empty link lighthouse"]');  
-                          // row.cells[2].innerText = data[key];
                           existing_cell.innerText = data[key].length;
                           existing_cell1.innerText = data[key];
                           flag=true;
@@ -402,19 +283,18 @@
                     }
                     if(myMap.get('Missing form label')!=undefined){
                       if(key.includes('Form elements do not have associated label')) {
-                          // if(table.rows[myMap.get('Missing form label')].getAttribute('class')=='details'){
-                          //   table.rows[myMap.get('Missing form label')+1].cells[3].innerText = data[key].length;
-                          //   table.rows[myMap.get('Missing form label')+2].cells[3].innerText = data[key];
-                          // }
-                          // else{
-                          //   table.rows[myMap.get('Missing form label')].cells[3].innerText = data[key].length;
-                          //   table.rows[myMap.get('Missing form label')+!].cells[3].innerText = data[key];
-                          // }
-                          //table.rows[myMap.get('Missing form label')].cells[3].innerText = data[key];
-                          //table.rows[myMap.get('Missing form label')].cells[3].innerText = data[key].length;
                           const existing_cell = document.querySelector('td[data-id="Missing form label lighthouse"]');  
                           const existing_cell1 = document.querySelector('td[data-id="new cell Missing form label lighthouse"]');  
-                          // row.cells[2].innerText = data[key];
+                          existing_cell.innerText = data[key].length;
+                          existing_cell1.innerText = data[key];
+                          flag=true;
+                          break;
+                      }
+                    }
+                    if(myMap.get('Very low contrast')!=undefined){
+                      if(key.includes('Background and foreground colors do not have a sufficient contrast ratio.')) {
+                          const existing_cell = document.querySelector('td[data-id="Very low contrast lighthouse"]');  
+                          const existing_cell1 = document.querySelector('td[data-id="new cell Very low contrast lighthouse"]');  
                           existing_cell.innerText = data[key].length;
                           existing_cell1.innerText = data[key];
                           flag=true;
@@ -423,11 +303,9 @@
                     }
                     
                   }
-                  
                   if(flag == true){
                     return;
                   }
-
                   const row = table.insertRow();
                   const cell = row.insertCell();
                   const cell1 = row.insertCell();
@@ -435,7 +313,6 @@
                   const cell3 = row.insertCell();
                   const cell4 = row.insertCell();
                   cell.innerText = key;
-                  //cell3.innerText = data[key]; // Using innerHTML to render the HTML content
                   cell3.innerText = data[key].length; 
                   cell1.innerText = 0; 
                   cell2.innerText = 0; 
@@ -458,12 +335,8 @@
                     newCell2.setAttribute('data-id', 'new cell '+key+' achecker');
                     newCell3.setAttribute('data-id', 'new cell '+key+' lighthouse');
                     newCell3.innerText= data[key];
-                    
                     table.appendChild(newRow);
-                    
                     rowCount++;
-                  
-              // });
           });
           
       })
@@ -471,11 +344,7 @@
           console.error('Error fetching or parsing the JSON file:', error);
       });
     }
-
     fetchData();
 </script>
-
-
-
 </body>
 </html>

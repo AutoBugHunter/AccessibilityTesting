@@ -13,16 +13,10 @@ app.use((req,res,next) => {
    res.setHeader('Content-Type', 'application/json');
    next();
 });
-//app.use(express.static('.')); // Serve static files from public directory
 
 app.get('/npm', async (req, res) => {
-    // exec('npm run test', (err,stdout,stderr) => {
-    //     res.send({val:stdout});
-    // });
-    console.log("*****4444");
-    const x = await exec('npm run test');
-    console.log(x.stdout);
-    res.send({val:"xxxxxyyyy"});
+    const x = await exec('npx playwright test AChecker.spec.ts Lighthouse.spec.ts Wave.spec.ts');
+    res.send({val:"Success"});
 });
 
 
@@ -32,13 +26,10 @@ app.get('/', (req, res) => {
 
 app.post('/update-json', (req, res) => {
     const newData = req.body;
-    console.log("JSON write Chandan");
     console.log(newData);
     fs.writeFile('data/config.json', JSON.stringify(newData), (err) => {
-        console.log("JSON write Chandan123");
         if (err) throw err;
         res.send("JSON data has been updated");
-        console.log("JSON write Chandan456");
     });
 });
 
