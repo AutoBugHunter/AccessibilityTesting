@@ -1,5 +1,5 @@
 # AccessibilityTesting
-To run single file from local : npx playwright test <<spec file>>> --headed  
+To run single file from local : npx playwright test "spec_file" --headed  
 
     ![Screenshot](images/Terminal2.png)
 
