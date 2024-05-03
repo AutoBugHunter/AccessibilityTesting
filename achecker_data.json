@@ -1,1 +1,1 @@
-{}
+{"img element missing alt attribute.":["\n<img src=\"book-cover.jpg\" />"],"select element missing an associated label.":["\n<select id=\"filter\">\n        <option value=\"genre\">Genre</option>\n        <option value=\"author\">Aut ..."],"b (bold) element used.":["\n<b>Discover Our Bookstore</b>"]}

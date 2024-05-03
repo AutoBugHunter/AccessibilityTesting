@@ -1,350 +1,441 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Four Column Web Page</title>
-<style>
- body {
-    background-image: url('https://img.freepik.com/free-vector/simple-blue-gradient-background-vector-business_53876-174922.jpg?size=626&ext=jpg&ga=GA1.1.735520172.1711411200&semt=ais');  /* Replace with your image path */
-    background-size: cover;      
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  th, td {
-    text-align: left;
-    padding: 8px;
-    border: 1px solid #ddd;
-  }
-  th {
-    background-color: #f2f2f2;
-  }
-  h1 {
-    text-align: center;
-  }
-  h2 {
-    text-align: center;
-  }
-  .details {
-            display: none;
-  }
-  .wide-input {
-        width: 300px; /* or you can use percentages like 100% to fill the container */
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Four Column Web Page</title>
+  <style>
+    body {
+      background-image: url('https://img.freepik.com/free-vector/simple-blue-gradient-background-vector-business_53876-174922.jpg?size=626&ext=jpg&ga=GA1.1.735520172.1711411200&semt=ais');
+      /* Replace with your image path */
+      background-size: cover;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 8px;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .details {
+      display: none;
+    }
+
+    .wide-input {
+      width: 300px;
+      /* or you can use percentages like 100% to fill the container */
+    }
+
+    .spinner-container {
+      display: none;
+      height: 100vh;
+      width: 99%;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+    }
+
+    .spinner {
+      border: 6px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 6px solid #3498db;
+      width: 30px;
+      height: 30px;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
 </head>
 <body>
-<h1>Comparision of Accessibiltiy tools</h1>
-<h2>Accessibiltiy Testing</h2>
-<label> URL:&nbsp; </label>
-<input id="urlChecker" class="wide-input" placeholder="Enter Url for Accessibility Check" >
-<label>&nbsp;&nbsp;&nbsp;</label>
-<button id="runNpmBtn" onclick="storeText()">Check It</button>
-<br>
-<br>
-<table id='table001'>
-  <tr>
-    <th>Accessible Check</th>
-    <th>Wave</th>
-    <th>AChecker</th>
-    <th>Lighthouse</th>
-    <th>Details</th>
-  </tr>
- 
-</table>
+  <div id="spinner-container" class="spinner-container">
+    <div class="spinner"></div>
+  </div>
+  <h1>Comparision of Accessibility tools</h1>
+  <h2>Accessibility Testing</h2>
+  <label> URL:&nbsp; </label>
+  <input id="urlChecker" class="wide-input" placeholder="Enter Url for Accessibility Check">
+  <label>&nbsp;&nbsp;&nbsp;</label>
+  <button id="runNpmBtn">Check It</button>
+  <br>
+  <br>
+  <div id="displayText"></div>
+  <br>
+  <table id='table001'>
+    <tr>
+      <th>Accessible Check</th>
+      <th>Wave</th>
+      <th>AChecker</th>
+      <th>Lighthouse</th>
+      <th>Details</th>
+    </tr>
 
-<script>
+  </table>
+
+  <script>
     let myMap = new Map();
     let rowCount = 1;
-    document.getElementById('runNpmBtn').addEventListener('click', function() {
-            fetch('http://localhost:5500/npm')
-                .then(response => response.json())
-                .then(data => console.log(data))
-                .catch(error => console.error('Error:', error));
-        });
+    var inputText;
+    document.getElementById('runNpmBtn').addEventListener('click', function () {
+      showLoader();
+      storeText();
+      // fetch('http://localhost:5500/npm')
+      //   .then(response => response.json())
+      //   .then(data => console.log(data))
+      //   .catch(error => console.error('Error:', error));
+    });
     function storeText() {
-      var inputText = document.getElementById("urlChecker").value;
+      inputText = document.getElementById("urlChecker").value;
+      displayText();
       fetch('http://localhost:5500/update-json', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ "baseURL": inputText })
-        })
+      })
         .then(response => response.text())
-        .then(data => console.log(data))
-        .catch(error => console.error('Error:', error));
+        .then(data => {
+          console.log(data);
+          fetch('http://localhost:5500/npm')
+        .then(response => {
+          hideLoader();
+          console.log(response.json());
+
+        })
+        //.then(data => console.log(data))
+        .catch(error => {
+          hideLoader();
+          console.error('Error:', error)});
+        })
+        .catch(error => {
+          hideLoader();
+          console.error('Error:', error)});
+    }
+    function displayText() {
+      document.getElementById("displayText").innerText = 'Accessibility Checkpoint comparison for ' + inputText + ' is shown below';
     }
     function toggleDetails(detailsId) {
       console.log(detailsId);
-            var details = document.getElementById(detailsId);
-            if (details.style.display === 'none') {
-                details.style.display = 'table-row';
-            } else {
-                details.style.display = 'none';
-            }
-            
-        }
-    function fetchData(){
-    fetch('wave_data.json')
-        .then(response => response.json())
-        .then(data => {
-            const keys = Object.keys(data);
-            const table = document.getElementById('table001').getElementsByTagName('tbody')[0];
-            Object.keys(data).forEach(key => {
-                    myMap.set(key, rowCount);
-                    const row = table.insertRow();
-                    const cell = row.insertCell();
-                    const cell1 = row.insertCell();
-                    const cell2 = row.insertCell();
-                    const cell3 = row.insertCell();
-                    const cell4 = row.insertCell(); 
-                    cell1.setAttribute('data-id', key+' wave');
-                    cell2.setAttribute('data-id', key+' achecker');
-                    cell3.setAttribute('data-id', key+' lighthouse');
-                    if(key=='Very low contrast'){
-                      cell.innerText = 'Contrast Issue';
-                    }
-                    else{
-                      cell.innerText = key;
-                    }
-                    cell1.innerText = data[key].length;
-                    cell2.innerText = 0;
-                    cell3.innerText = 0;
-                    var button = document.createElement("button");
-                    button.innerHTML = "Compare";
-                    button.id = "button"+rowCount;
-                    button.onclick = function() {
-                      console.log("Button clicked, rowCount is " + rowCount);
-                      toggleDetails('details'+button.getAttribute('id').split('button')[1]);
-                    };
-                    cell4.appendChild(button);
-                    var newRow = document.createElement("tr");
-                    newRow.id = "details"+rowCount;
-                    newRow.className = "details";
-                    newRow.setAttribute('data-id',key);
-                    const newCell=newRow.insertCell();
-                    const newCell1=newRow.insertCell();
-                    const newCell2=newRow.insertCell();
-                    const newCell3=newRow.insertCell();
-                    newCell1.setAttribute('data-id', 'new cell '+key+' wave');
-                    newCell2.setAttribute('data-id', 'new cell '+key+' achecker');
-                    newCell3.setAttribute('data-id', 'new cell '+key+' lighthouse');
-                    newCell1.innerText= data[key];
-                    table.appendChild(newRow);
-                    rowCount++;
-            });
-            
-            
-        })
-        .catch(error => {
-            console.error('Error fetching or parsing the JSON file:', error);
-        });
+      var details = document.getElementById(detailsId);
+      if (details.style.display === 'none') {
+        details.style.display = 'table-row';
+      } else {
+        details.style.display = 'none';
+      }
 
-  fetch('achecker_data.json')
-      .then(response => response.json())
-      .then(data => {
-          const keys = Object.keys(data);
+    }
+    function loadWaveData(value) {
+      value.then(data => {
+        const keys = Object.keys(data);
           const table = document.getElementById('table001').getElementsByTagName('tbody')[0];
-          let countContrast =0;
           Object.keys(data).forEach(key => {
-                  let flag = false;
-                  for (let index = 0; index < table.rows.length; index++) {
-                    let errorName=table.rows[index].cells[0].innerHTML;  
-                    if(myMap.get('Missing alternative text')!=undefined){
-                      if(key == 'img element missing alt attribute.') {
-                          const existing_cell = document.querySelector('td[data-id="Missing alternative text achecker"]');  
-                          const existing_cell1 = document.querySelector('td[data-id="new cell Missing alternative text achecker"]'); 
-                          existing_cell.innerText = data[key].length;
-                          existing_cell1.innerText = data[key];
-                          flag=true;
-                          break;
-                      }
-                    }
-                    if(myMap.get('Missing form label')!=undefined){
-                      if(key.includes('missing an associated label.')) {
-                          const existing_cell = document.querySelector('td[data-id="Missing form label achecker"]'); 
-                          const existing_cell1 = document.querySelector('td[data-id="new cell Missing form label achecker"]');  
-                          existing_cell.innerText = data[key].length;
-                          existing_cell1.innerText = data[key];
-                          flag=true;
-                          break;
-                      }
-                    }
-                    if(myMap.get('Empty link')!=undefined){
-                      if(key.includes('Anchor contains no text.')) {
-                          const existing_cell = document.querySelector('td[data-id="Empty link achecker"]'); 
-                          const existing_cell1 = document.querySelector('td[data-id="new cell Empty link achecker"]');  
-                          existing_cell.innerText = data[key].length;
-                          existing_cell1.innerText = data[key];
-                          flag=true;
-                          break;
-                      }
-                    }
-                    if(myMap.get('Very low contrast')!=undefined){
-                      if(key.includes('The contrast between the colour of')) {
-                          countContrast++;
-                          const existing_cell = document.querySelector('td[data-id="Very low contrast achecker"]'); 
-                          const existing_cell1 = document.querySelector('td[data-id="new cell Very low contrast achecker"]');  
-                          if(countContrast>1){
-                            existing_cell.innerText = +existing_cell.innerText + +data[key].length;
-                            existing_cell1.innerText = existing_cell1.innerText + data[key];
-                          }
-                          else{
-                            existing_cell.innerText = data[key].length;
-                            existing_cell1.innerText = data[key];
-                          }
-                          flag=true;
-                          break;
-                      }
-                    }
-                    
-                  }
-                  if(flag == true){
-                    return;
-                  }
-                  const row = table.insertRow();
-                  const cell = row.insertCell();
-                  const cell1 = row.insertCell();
-                  const cell2 = row.insertCell();
-                  const cell3 = row.insertCell();
-                  const cell4 = row.insertCell();
-                  cell.innerText = key;
-                  cell2.innerText = data[key].length;
-                  cell1.innerText = 0;
-                  cell3.innerText = 0;
-                  var button = document.createElement("button");
-                    button.innerHTML = "Compare";
-                    button.id = "button"+rowCount;
-                    button.onclick = function() {
-                      console.log("Button clicked, rowCount is " + rowCount);
-                      toggleDetails('details'+button.getAttribute('id').split('button')[1]);
-                    };
-                    cell4.appendChild(button);
-                    var newRow = document.createElement("tr");
-                    newRow.id = "details"+rowCount;
-                    newRow.className = "details";
-                    const newCell=newRow.insertCell();
-                    const newCell1=newRow.insertCell();
-                    const newCell2=newRow.insertCell();
-                    const newCell3=newRow.insertCell();
-                    newCell1.setAttribute('data-id', 'new cell '+key+' wave');
-                    newCell2.setAttribute('data-id', 'new cell '+key+' achecker');
-                    newCell3.setAttribute('data-id', 'new cell '+key+' lighthouse');
-                    newCell2.innerText= data[key];
-                    table.appendChild(newRow);
-                    rowCount++;
+            myMap.set(key, rowCount);
+            const row = table.insertRow();
+            const cell = row.insertCell();
+            const cell1 = row.insertCell();
+            const cell2 = row.insertCell();
+            const cell3 = row.insertCell();
+            const cell4 = row.insertCell();
+            cell1.setAttribute('data-id', key + ' wave');
+            cell2.setAttribute('data-id', key + ' achecker');
+            cell3.setAttribute('data-id', key + ' lighthouse');
+            if (key == 'Very low contrast') {
+              cell.innerText = 'Contrast Issue';
+            }
+            else {
+              cell.innerText = key;
+            }
+            cell1.innerText = data[key].length;
+            cell2.innerText = 0;
+            cell3.innerText = 0;
+            var button = document.createElement("button");
+            button.innerHTML = "Compare";
+            button.id = "button" + rowCount;
+            button.onclick = function () {
+              console.log("Button clicked, rowCount is " + rowCount);
+              toggleDetails('details' + button.getAttribute('id').split('button')[1]);
+            };
+            cell4.appendChild(button);
+            var newRow = document.createElement("tr");
+            newRow.id = "details" + rowCount;
+            newRow.className = "details";
+            newRow.setAttribute('data-id', key);
+            const newCell = newRow.insertCell();
+            const newCell1 = newRow.insertCell();
+            const newCell2 = newRow.insertCell();
+            const newCell3 = newRow.insertCell();
+            newCell1.setAttribute('data-id', 'new cell ' + key + ' wave');
+            newCell2.setAttribute('data-id', 'new cell ' + key + ' achecker');
+            newCell3.setAttribute('data-id', 'new cell ' + key + ' lighthouse');
+            newCell1.innerText = data[key];
+            table.appendChild(newRow);
+            rowCount++;
           });
-          
-      })
-      .catch(error => {
-          console.error('Error fetching or parsing the JSON file:', error);
       });
-  fetch('lighthouse_data.json')
-      .then(response => response.json())
-      .then(data => {
-          const keys = Object.keys(data);
+      
+    }
+
+    function loadAcheckerData(value) {
+      value.then(data => {
+        const keys = Object.keys(data);
+          const table = document.getElementById('table001').getElementsByTagName('tbody')[0];
+          let countContrast = 0;
+          Object.keys(data).forEach(key => {
+            let flag = false;
+            for (let index = 0; index < table.rows.length; index++) {
+              let errorName = table.rows[index].cells[0].innerHTML;
+              if (myMap.get('Missing alternative text') != undefined) {
+                if (key == 'img element missing alt attribute.') {
+                  const existing_cell = document.querySelector('td[data-id="Missing alternative text achecker"]');
+                  const existing_cell1 = document.querySelector('td[data-id="new cell Missing alternative text achecker"]');
+                  existing_cell.innerText = data[key].length;
+                  existing_cell1.innerText = data[key];
+                  flag = true;
+                  break;
+                }
+              }
+              if (myMap.get('Missing form label') != undefined) {
+                if (key.includes('missing an associated label.')) {
+                  const existing_cell = document.querySelector('td[data-id="Missing form label achecker"]');
+                  const existing_cell1 = document.querySelector('td[data-id="new cell Missing form label achecker"]');
+                  existing_cell.innerText = data[key].length;
+                  existing_cell1.innerText = data[key];
+                  flag = true;
+                  break;
+                }
+              }
+              if (myMap.get('Empty link') != undefined) {
+                if (key.includes('Anchor contains no text.')) {
+                  const existing_cell = document.querySelector('td[data-id="Empty link achecker"]');
+                  const existing_cell1 = document.querySelector('td[data-id="new cell Empty link achecker"]');
+                  existing_cell.innerText = data[key].length;
+                  existing_cell1.innerText = data[key];
+                  flag = true;
+                  break;
+                }
+              }
+              if (myMap.get('Very low contrast') != undefined) {
+                if (key.includes('The contrast between the colour of')) {
+                  countContrast++;
+                  const existing_cell = document.querySelector('td[data-id="Very low contrast achecker"]');
+                  const existing_cell1 = document.querySelector('td[data-id="new cell Very low contrast achecker"]');
+                  if (countContrast > 1) {
+                    existing_cell.innerText = +existing_cell.innerText + +data[key].length;
+                    existing_cell1.innerText = existing_cell1.innerText + data[key];
+                  }
+                  else {
+                    existing_cell.innerText = data[key].length;
+                    existing_cell1.innerText = data[key];
+                  }
+                  flag = true;
+                  break;
+                }
+              }
+
+            }
+            if (flag == true) {
+              return;
+            }
+            const row = table.insertRow();
+            const cell = row.insertCell();
+            const cell1 = row.insertCell();
+            const cell2 = row.insertCell();
+            const cell3 = row.insertCell();
+            const cell4 = row.insertCell();
+            cell.innerText = key;
+            cell2.innerText = data[key].length;
+            cell1.innerText = 0;
+            cell3.innerText = 0;
+            var button = document.createElement("button");
+            button.innerHTML = "Compare";
+            button.id = "button" + rowCount;
+            button.onclick = function () {
+              console.log("Button clicked, rowCount is " + rowCount);
+              toggleDetails('details' + button.getAttribute('id').split('button')[1]);
+            };
+            cell4.appendChild(button);
+            var newRow = document.createElement("tr");
+            newRow.id = "details" + rowCount;
+            newRow.className = "details";
+            const newCell = newRow.insertCell();
+            const newCell1 = newRow.insertCell();
+            const newCell2 = newRow.insertCell();
+            const newCell3 = newRow.insertCell();
+            newCell1.setAttribute('data-id', 'new cell ' + key + ' wave');
+            newCell2.setAttribute('data-id', 'new cell ' + key + ' achecker');
+            newCell3.setAttribute('data-id', 'new cell ' + key + ' lighthouse');
+            newCell2.innerText = data[key];
+            table.appendChild(newRow);
+            rowCount++;
+          });
+      });
+
+      
+    }
+
+    function loadLighthouseData(value) {
+      value.then(data => {
+        const keys = Object.keys(data);
           const table = document.getElementById('table001').getElementsByTagName('tbody')[0];
           Object.keys(data).forEach(key => {
-                  let flag = false;
-                  for (let index = 0; index < table.rows.length; index++) {
-                    let errorName=table.rows[index].cells[0].innerHTML;
-                    if(myMap.get('Missing alternative text')!=undefined){
-                      if(key == 'Image elements do not have `[alt]` attributes') {
-                          const existing_cell = document.querySelector('td[data-id="Missing alternative text lighthouse"]');  
-                          const existing_cell1 = document.querySelector('td[data-id="new cell Missing alternative text lighthouse"]');  
-                          existing_cell.innerText = data[key].length;
-                          existing_cell1.innerText = data[key];
-                          flag=true;
-                          break;
-                      }
-                    }
-                    if(myMap.get('Empty button')!=undefined){
-                      if(key.includes('Buttons do not have an accessible name')) {
-                          const existing_cell = document.querySelector('td[data-id="Empty button lighthouse"]');  
-                          const existing_cell1 = document.querySelector('td[data-id="new cell Empty button lighthouse"]');  
-                          existing_cell.innerText = data[key].length;
-                          existing_cell1.innerText = data[key];
-                          flag=true;
-                          break;
-                      }
-                    }
-                    if(myMap.get('Empty link')!=undefined){
-                      if(key.includes('Links do not have a discernible name')) {
-                          const existing_cell = document.querySelector('td[data-id="Empty link lighthouse"]');  
-                          const existing_cell1 = document.querySelector('td[data-id="new cell Empty link lighthouse"]');  
-                          existing_cell.innerText = data[key].length;
-                          existing_cell1.innerText = data[key];
-                          flag=true;
-                          break;
-                      }
-                    }
-                    if(myMap.get('Missing form label')!=undefined){
-                      if(key.includes('Form elements do not have associated label')) {
-                          const existing_cell = document.querySelector('td[data-id="Missing form label lighthouse"]');  
-                          const existing_cell1 = document.querySelector('td[data-id="new cell Missing form label lighthouse"]');  
-                          existing_cell.innerText = data[key].length;
-                          existing_cell1.innerText = data[key];
-                          flag=true;
-                          break;
-                      }
-                    }
-                    if(myMap.get('Very low contrast')!=undefined){
-                      if(key.includes('Background and foreground colors do not have a sufficient contrast ratio.')) {
-                          const existing_cell = document.querySelector('td[data-id="Very low contrast lighthouse"]');  
-                          const existing_cell1 = document.querySelector('td[data-id="new cell Very low contrast lighthouse"]');  
-                          existing_cell.innerText = data[key].length;
-                          existing_cell1.innerText = data[key];
-                          flag=true;
-                          break;
-                      }
-                    }
-                    
-                  }
-                  if(flag == true){
-                    return;
-                  }
-                  const row = table.insertRow();
-                  const cell = row.insertCell();
-                  const cell1 = row.insertCell();
-                  const cell2 = row.insertCell();
-                  const cell3 = row.insertCell();
-                  const cell4 = row.insertCell();
-                  cell.innerText = key;
-                  cell3.innerText = data[key].length; 
-                  cell1.innerText = 0; 
-                  cell2.innerText = 0; 
-                  var button = document.createElement("button");
-                    button.innerHTML = "Compare";
-                    button.id = "button"+rowCount;
-                    button.onclick = function() {
-                      console.log("Button clicked, rowCount is " + rowCount);
-                      toggleDetails('details'+button.getAttribute('id').split('button')[1]);
-                    };
-                    cell4.appendChild(button);
-                    var newRow = document.createElement("tr");
-                    newRow.id = "details"+rowCount;
-                    newRow.className = "details";
-                    const newCell=newRow.insertCell();
-                    const newCell1=newRow.insertCell();
-                    const newCell2=newRow.insertCell();
-                    const newCell3=newRow.insertCell();
-                    newCell1.setAttribute('data-id', 'new cell '+key+' wave');
-                    newCell2.setAttribute('data-id', 'new cell '+key+' achecker');
-                    newCell3.setAttribute('data-id', 'new cell '+key+' lighthouse');
-                    newCell3.innerText= data[key];
-                    table.appendChild(newRow);
-                    rowCount++;
+            let flag = false;
+            for (let index = 0; index < table.rows.length; index++) {
+              let errorName = table.rows[index].cells[0].innerHTML;
+              if (myMap.get('Missing alternative text') != undefined) {
+                if (key == 'Image elements do not have `[alt]` attributes') {
+                  const existing_cell = document.querySelector('td[data-id="Missing alternative text lighthouse"]');
+                  const existing_cell1 = document.querySelector('td[data-id="new cell Missing alternative text lighthouse"]');
+                  existing_cell.innerText = data[key].length;
+                  existing_cell1.innerText = data[key];
+                  flag = true;
+                  break;
+                }
+              }
+              if (myMap.get('Empty button') != undefined) {
+                if (key.includes('Buttons do not have an accessible name')) {
+                  const existing_cell = document.querySelector('td[data-id="Empty button lighthouse"]');
+                  const existing_cell1 = document.querySelector('td[data-id="new cell Empty button lighthouse"]');
+                  existing_cell.innerText = data[key].length;
+                  existing_cell1.innerText = data[key];
+                  flag = true;
+                  break;
+                }
+              }
+              if (myMap.get('Empty link') != undefined) {
+                if (key.includes('Links do not have a discernible name')) {
+                  const existing_cell = document.querySelector('td[data-id="Empty link lighthouse"]');
+                  const existing_cell1 = document.querySelector('td[data-id="new cell Empty link lighthouse"]');
+                  existing_cell.innerText = data[key].length;
+                  existing_cell1.innerText = data[key];
+                  flag = true;
+                  break;
+                }
+              }
+              if (myMap.get('Missing form label') != undefined) {
+                if (key.includes('Form elements do not have associated label')) {
+                  const existing_cell = document.querySelector('td[data-id="Missing form label lighthouse"]');
+                  const existing_cell1 = document.querySelector('td[data-id="new cell Missing form label lighthouse"]');
+                  existing_cell.innerText = data[key].length;
+                  existing_cell1.innerText = data[key];
+                  flag = true;
+                  break;
+                }
+              }
+              if (myMap.get('Very low contrast') != undefined) {
+                if (key.includes('Background and foreground colors do not have a sufficient contrast ratio.')) {
+                  const existing_cell = document.querySelector('td[data-id="Very low contrast lighthouse"]');
+                  const existing_cell1 = document.querySelector('td[data-id="new cell Very low contrast lighthouse"]');
+                  existing_cell.innerText = data[key].length;
+                  existing_cell1.innerText = data[key];
+                  flag = true;
+                  break;
+                }
+              }
+
+            }
+            if (flag == true) {
+              return;
+            }
+            const row = table.insertRow();
+            const cell = row.insertCell();
+            const cell1 = row.insertCell();
+            const cell2 = row.insertCell();
+            const cell3 = row.insertCell();
+            const cell4 = row.insertCell();
+            cell.innerText = key;
+            cell3.innerText = data[key].length;
+            cell1.innerText = 0;
+            cell2.innerText = 0;
+            var button = document.createElement("button");
+            button.innerHTML = "Compare";
+            button.id = "button" + rowCount;
+            button.onclick = function () {
+              console.log("Button clicked, rowCount is " + rowCount);
+              toggleDetails('details' + button.getAttribute('id').split('button')[1]);
+            };
+            cell4.appendChild(button);
+            var newRow = document.createElement("tr");
+            newRow.id = "details" + rowCount;
+            newRow.className = "details";
+            const newCell = newRow.insertCell();
+            const newCell1 = newRow.insertCell();
+            const newCell2 = newRow.insertCell();
+            const newCell3 = newRow.insertCell();
+            newCell1.setAttribute('data-id', 'new cell ' + key + ' wave');
+            newCell2.setAttribute('data-id', 'new cell ' + key + ' achecker');
+            newCell3.setAttribute('data-id', 'new cell ' + key + ' lighthouse');
+            newCell3.innerText = data[key];
+            table.appendChild(newRow);
+            rowCount++;
+
           });
-          
-      })
-      .catch(error => {
-          console.error('Error fetching or parsing the JSON file:', error);
+      });
+      
+    }
+
+    function fetchData() {
+      showLoader();
+      Promise.allSettled([fetch('wave_data.json'), fetch('achecker_data.json'), fetch('lighthouse_data.json')])
+      .then(results => {
+        if(results[0] && results[0].status ==="fulfilled") {
+          loadWaveData(results[0].value.json());
+        } else {
+          console.error('Error fetching or parsing the wave JSON file:', results[0]?.reason || 'Failed');
+        }
+
+        if(results[1] && results[1].status ==="fulfilled") {
+          loadAcheckerData(results[1].value.json());
+        } else {
+          console.error('Error fetching or parsing the achecker JSON file:', results[1]?.reason || 'Failed');
+        }
+
+        if(results[2] && results[2].status ==="fulfilled") {
+          loadLighthouseData(results[2].value.json());
+        } else {
+          console.error('Error fetching or parsing the lighthouse JSON file:', results[2]?.reason || 'Failed');
+        }
+
+        hideLoader();
       });
     }
+
+
     fetchData();
-</script>
+
+    function showLoader() {
+      document.getElementById('spinner-container').style.display = 'flex';
+    }
+
+    function hideLoader() {
+      document.getElementById('spinner-container').style.display = 'none';
+    }
+  </script>
 </body>
 </html>

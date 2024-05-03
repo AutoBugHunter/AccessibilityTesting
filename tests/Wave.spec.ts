@@ -29,6 +29,9 @@ test('Accessibility Report', async ({ page }) => {
     let elementsDetailCount = await elementsDetail.count();
     let value = '';
     const myArray : string[]= [];
+    console.log(elementsDetailCount);
+    console.log(i + " value of i");
+    console.log(limitCount + " value of limitCount");
     for (let j = 1; j <= elementsDetailCount; j++) {
       if(i>limitCount){
         await page.locator('xpath=//ul[contains(@id,"group_list_contrast")]/li[1]/ul/li['+j+']/img').click();      
@@ -53,10 +56,11 @@ test('Accessibility Report', async ({ page }) => {
           eli=await iframeElement.locator('xpath=((//img[@alt="ERRORS: '+words[1]+'"])['+j+'])/preceding-sibling::*[1]');
         }
         let outerHtml;
-        if(words[1]=='Page refreshes or redirects'){
-          outerHtml = 'Page refreshes or redirects applies to entire page.';
+        if(words[1]=='Page refreshes or redirects' || words[1]=='Missing or uninformative page title'  || words[1]=='Language missing or invalid'){
+          outerHtml = 'Applies to entire page.';
         }
         else{
+          console.log(words[1]+ " 00009999  "+j);
           outerHtml = await eli.evaluate(node => node.outerHTML);
         }
         
