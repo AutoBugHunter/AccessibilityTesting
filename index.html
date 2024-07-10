@@ -93,6 +93,8 @@
       <th>Wave</th>
       <th>AChecker</th>
       <th>Lighthouse</th>
+      <th>Accessmonitor</th>
+      <th>Qualweb</th>
       <th>Details</th>
     </tr>
 
@@ -163,9 +165,13 @@
             const cell2 = row.insertCell();
             const cell3 = row.insertCell();
             const cell4 = row.insertCell();
+            const cell5 = row.insertCell();
+            const cell6 = row.insertCell();
             cell1.setAttribute('data-id', key + ' wave');
             cell2.setAttribute('data-id', key + ' achecker');
             cell3.setAttribute('data-id', key + ' lighthouse');
+            cell4.setAttribute('data-id', key + ' accessmonitor');
+            cell5.setAttribute('data-id', key + ' qualweb');
             if (key == 'Very low contrast') {
               cell.innerText = 'Contrast Issue';
             }
@@ -175,6 +181,8 @@
             cell1.innerText = data[key].length;
             cell2.innerText = 0;
             cell3.innerText = 0;
+            cell4.innerText = 0;
+            cell5.innerText = 0;
             var button = document.createElement("button");
             button.innerHTML = "Compare";
             button.id = "button" + rowCount;
@@ -182,7 +190,7 @@
               console.log("Button clicked, rowCount is " + rowCount);
               toggleDetails('details' + button.getAttribute('id').split('button')[1]);
             };
-            cell4.appendChild(button);
+            cell6.appendChild(button);
             var newRow = document.createElement("tr");
             newRow.id = "details" + rowCount;
             newRow.className = "details";
@@ -191,9 +199,13 @@
             const newCell1 = newRow.insertCell();
             const newCell2 = newRow.insertCell();
             const newCell3 = newRow.insertCell();
+            const newCell4 = newRow.insertCell();
+            const newCell5 = newRow.insertCell();
             newCell1.setAttribute('data-id', 'new cell ' + key + ' wave');
             newCell2.setAttribute('data-id', 'new cell ' + key + ' achecker');
             newCell3.setAttribute('data-id', 'new cell ' + key + ' lighthouse');
+            newCell4.setAttribute('data-id', 'new cell ' + key + ' accessmonitor');
+            newCell5.setAttribute('data-id', 'new cell ' + key + ' qualweb');
             newCell1.innerText = data[key];
             table.appendChild(newRow);
             rowCount++;
@@ -269,10 +281,14 @@
             const cell2 = row.insertCell();
             const cell3 = row.insertCell();
             const cell4 = row.insertCell();
+            const cell5 = row.insertCell();
+            const cell6 = row.insertCell();
             cell.innerText = key;
             cell2.innerText = data[key].length;
             cell1.innerText = 0;
             cell3.innerText = 0;
+            cell4.innerText = 0;
+            cell5.innerText = 0;
             var button = document.createElement("button");
             button.innerHTML = "Compare";
             button.id = "button" + rowCount;
@@ -280,7 +296,7 @@
               console.log("Button clicked, rowCount is " + rowCount);
               toggleDetails('details' + button.getAttribute('id').split('button')[1]);
             };
-            cell4.appendChild(button);
+            cell6.appendChild(button);
             var newRow = document.createElement("tr");
             newRow.id = "details" + rowCount;
             newRow.className = "details";
@@ -288,9 +304,13 @@
             const newCell1 = newRow.insertCell();
             const newCell2 = newRow.insertCell();
             const newCell3 = newRow.insertCell();
+            const newCell4 = newRow.insertCell();
+            const newCell5 = newRow.insertCell();
             newCell1.setAttribute('data-id', 'new cell ' + key + ' wave');
             newCell2.setAttribute('data-id', 'new cell ' + key + ' achecker');
             newCell3.setAttribute('data-id', 'new cell ' + key + ' lighthouse');
+            newCell4.setAttribute('data-id', 'new cell ' + key + ' accessmonitor');
+            newCell5.setAttribute('data-id', 'new cell ' + key + ' qualweb');
             newCell2.innerText = data[key];
             table.appendChild(newRow);
             rowCount++;
@@ -369,10 +389,14 @@
             const cell2 = row.insertCell();
             const cell3 = row.insertCell();
             const cell4 = row.insertCell();
+            const cell5 = row.insertCell();
+            const cell6 = row.insertCell();
             cell.innerText = key;
             cell3.innerText = data[key].length;
             cell1.innerText = 0;
             cell2.innerText = 0;
+            cell4.innerText = 0;
+            cell5.innerText = 0;
             var button = document.createElement("button");
             button.innerHTML = "Compare";
             button.id = "button" + rowCount;
@@ -380,7 +404,7 @@
               console.log("Button clicked, rowCount is " + rowCount);
               toggleDetails('details' + button.getAttribute('id').split('button')[1]);
             };
-            cell4.appendChild(button);
+            cell6.appendChild(button);
             var newRow = document.createElement("tr");
             newRow.id = "details" + rowCount;
             newRow.className = "details";
@@ -388,9 +412,13 @@
             const newCell1 = newRow.insertCell();
             const newCell2 = newRow.insertCell();
             const newCell3 = newRow.insertCell();
+            const newCell4 = newRow.insertCell();
+            const newCell5 = newRow.insertCell();
             newCell1.setAttribute('data-id', 'new cell ' + key + ' wave');
             newCell2.setAttribute('data-id', 'new cell ' + key + ' achecker');
             newCell3.setAttribute('data-id', 'new cell ' + key + ' lighthouse');
+            newCell4.setAttribute('data-id', 'new cell ' + key + ' accessmonitor');
+            newCell5.setAttribute('data-id', 'new cell ' + key + ' qualweb');
             newCell3.innerText = data[key];
             table.appendChild(newRow);
             rowCount++;
@@ -400,9 +428,226 @@
       
     }
 
+    function loadAccessMonitorData(value) {
+      value.then(data => {
+        const keys = Object.keys(data);
+          const table = document.getElementById('table001').getElementsByTagName('tbody')[0];
+          Object.keys(data).forEach(key => {
+            let flag = false;
+            for (let index = 0; index < table.rows.length; index++) {
+              let errorName = table.rows[index].cells[0].innerHTML;
+              if (myMap.get('Missing alternative text') != undefined) {
+                if (key == 'Image elements do not have `[alt]` attributes') {
+                  const existing_cell = document.querySelector('td[data-id="Missing alternative text lighthouse"]');
+                  const existing_cell1 = document.querySelector('td[data-id="new cell Missing alternative text lighthouse"]');
+                  existing_cell.innerText = data[key].length;
+                  existing_cell1.innerText = data[key];
+                  flag = true;
+                  break;
+                }
+              }
+              if (myMap.get('Empty button') != undefined) {
+                if (key.includes('Buttons do not have an accessible name')) {
+                  const existing_cell = document.querySelector('td[data-id="Empty button lighthouse"]');
+                  const existing_cell1 = document.querySelector('td[data-id="new cell Empty button lighthouse"]');
+                  existing_cell.innerText = data[key].length;
+                  existing_cell1.innerText = data[key];
+                  flag = true;
+                  break;
+                }
+              }
+              if (myMap.get('Empty link') != undefined) {
+                if (key.includes('Links do not have a discernible name')) {
+                  const existing_cell = document.querySelector('td[data-id="Empty link lighthouse"]');
+                  const existing_cell1 = document.querySelector('td[data-id="new cell Empty link lighthouse"]');
+                  existing_cell.innerText = data[key].length;
+                  existing_cell1.innerText = data[key];
+                  flag = true;
+                  break;
+                }
+              }
+              if (myMap.get('Missing form label') != undefined) {
+                if (key.includes('Form elements do not have associated label')) {
+                  const existing_cell = document.querySelector('td[data-id="Missing form label lighthouse"]');
+                  const existing_cell1 = document.querySelector('td[data-id="new cell Missing form label lighthouse"]');
+                  existing_cell.innerText = data[key].length;
+                  existing_cell1.innerText = data[key];
+                  flag = true;
+                  break;
+                }
+              }
+              if (myMap.get('Very low contrast') != undefined) {
+                if (key.includes('Background and foreground colors do not have a sufficient contrast ratio.')) {
+                  const existing_cell = document.querySelector('td[data-id="Very low contrast lighthouse"]');
+                  const existing_cell1 = document.querySelector('td[data-id="new cell Very low contrast lighthouse"]');
+                  existing_cell.innerText = data[key].length;
+                  existing_cell1.innerText = data[key];
+                  flag = true;
+                  break;
+                }
+              }
+
+            }
+            if (flag == true) {
+              return;
+            }
+            const row = table.insertRow();
+            const cell = row.insertCell();
+            const cell1 = row.insertCell();
+            const cell2 = row.insertCell();
+            const cell3 = row.insertCell();
+            const cell4 = row.insertCell();
+            const cell5 = row.insertCell();
+            const cell6 = row.insertCell();
+            cell.innerText = key;
+            cell4.innerText = data[key].length;
+            cell1.innerText = 0;
+            cell2.innerText = 0;
+            cell3.innerText = 0;
+            cell5.innerText = 0;
+            var button = document.createElement("button");
+            button.innerHTML = "Compare";
+            button.id = "button" + rowCount;
+            button.onclick = function () {
+              console.log("Button clicked, rowCount is " + rowCount);
+              toggleDetails('details' + button.getAttribute('id').split('button')[1]);
+            };
+            cell6.appendChild(button);
+            var newRow = document.createElement("tr");
+            newRow.id = "details" + rowCount;
+            newRow.className = "details";
+            const newCell = newRow.insertCell();
+            const newCell1 = newRow.insertCell();
+            const newCell2 = newRow.insertCell();
+            const newCell3 = newRow.insertCell();
+            const newCell4 = newRow.insertCell();
+            const newCell5 = newRow.insertCell();
+            newCell1.setAttribute('data-id', 'new cell ' + key + ' wave');
+            newCell2.setAttribute('data-id', 'new cell ' + key + ' achecker');
+            newCell3.setAttribute('data-id', 'new cell ' + key + ' lighthouse');
+            newCell4.setAttribute('data-id', 'new cell ' + key + ' accessmonitor');
+            newCell5.setAttribute('data-id', 'new cell ' + key + ' qualeweb');
+            newCell4.innerText = data[key];
+            table.appendChild(newRow);
+            rowCount++;
+
+          });
+      });
+      
+    }
+
+    function loadQualWebData(value) {
+      value.then(data => {
+        const keys = Object.keys(data);
+          const table = document.getElementById('table001').getElementsByTagName('tbody')[0];
+          Object.keys(data).forEach(key => {
+            let flag = false;
+            for (let index = 0; index < table.rows.length; index++) {
+              let errorName = table.rows[index].cells[0].innerHTML;
+              if (myMap.get('Missing alternative text') != undefined) {
+                if (key == 'Image elements do not have `[alt]` attributes') {
+                  const existing_cell = document.querySelector('td[data-id="Missing alternative text lighthouse"]');
+                  const existing_cell1 = document.querySelector('td[data-id="new cell Missing alternative text lighthouse"]');
+                  existing_cell.innerText = data[key].length;
+                  existing_cell1.innerText = data[key];
+                  flag = true;
+                  break;
+                }
+              }
+              if (myMap.get('Empty button') != undefined) {
+                if (key.includes('Buttons do not have an accessible name')) {
+                  const existing_cell = document.querySelector('td[data-id="Empty button lighthouse"]');
+                  const existing_cell1 = document.querySelector('td[data-id="new cell Empty button lighthouse"]');
+                  existing_cell.innerText = data[key].length;
+                  existing_cell1.innerText = data[key];
+                  flag = true;
+                  break;
+                }
+              }
+              if (myMap.get('Empty link') != undefined) {
+                if (key.includes('Links do not have a discernible name')) {
+                  const existing_cell = document.querySelector('td[data-id="Empty link lighthouse"]');
+                  const existing_cell1 = document.querySelector('td[data-id="new cell Empty link lighthouse"]');
+                  existing_cell.innerText = data[key].length;
+                  existing_cell1.innerText = data[key];
+                  flag = true;
+                  break;
+                }
+              }
+              if (myMap.get('Missing form label') != undefined) {
+                if (key.includes('Form elements do not have associated label')) {
+                  const existing_cell = document.querySelector('td[data-id="Missing form label lighthouse"]');
+                  const existing_cell1 = document.querySelector('td[data-id="new cell Missing form label lighthouse"]');
+                  existing_cell.innerText = data[key].length;
+                  existing_cell1.innerText = data[key];
+                  flag = true;
+                  break;
+                }
+              }
+              if (myMap.get('Very low contrast') != undefined) {
+                if (key.includes('Background and foreground colors do not have a sufficient contrast ratio.')) {
+                  const existing_cell = document.querySelector('td[data-id="Very low contrast lighthouse"]');
+                  const existing_cell1 = document.querySelector('td[data-id="new cell Very low contrast lighthouse"]');
+                  existing_cell.innerText = data[key].length;
+                  existing_cell1.innerText = data[key];
+                  flag = true;
+                  break;
+                }
+              }
+
+            }
+            if (flag == true) {
+              return;
+            }
+            const row = table.insertRow();
+            const cell = row.insertCell();
+            const cell1 = row.insertCell();
+            const cell2 = row.insertCell();
+            const cell3 = row.insertCell();
+            const cell4 = row.insertCell();
+            const cell5 = row.insertCell();
+            const cell6 = row.insertCell();
+            cell.innerText = key;
+            cell5.innerText = data[key].length;
+            cell1.innerText = 0;
+            cell2.innerText = 0;
+            cell3.innerText = 0;
+            cell4.innerText = 0;
+            var button = document.createElement("button");
+            button.innerHTML = "Compare";
+            button.id = "button" + rowCount;
+            button.onclick = function () {
+              console.log("Button clicked, rowCount is " + rowCount);
+              toggleDetails('details' + button.getAttribute('id').split('button')[1]);
+            };
+            cell6.appendChild(button);
+            var newRow = document.createElement("tr");
+            newRow.id = "details" + rowCount;
+            newRow.className = "details";
+            const newCell = newRow.insertCell();
+            const newCell1 = newRow.insertCell();
+            const newCell2 = newRow.insertCell();
+            const newCell3 = newRow.insertCell();
+            const newCell4 = newRow.insertCell();
+            const newCell5 = newRow.insertCell();
+            newCell1.setAttribute('data-id', 'new cell ' + key + ' wave');
+            newCell2.setAttribute('data-id', 'new cell ' + key + ' achecker');
+            newCell3.setAttribute('data-id', 'new cell ' + key + ' lighthouse');
+            newCell4.setAttribute('data-id', 'new cell ' + key + ' accessmonitor');
+            newCell5.setAttribute('data-id', 'new cell ' + key + ' qualeweb');
+            newCell5.innerText = data[key];
+            table.appendChild(newRow);
+            rowCount++;
+
+          });
+      });
+      
+    }
+
+
     function fetchData() {
       showLoader();
-      Promise.allSettled([fetch('wave_data.json'), fetch('achecker_data.json'), fetch('lighthouse_data.json')])
+      Promise.allSettled([fetch('wave_data.json'), fetch('achecker_data.json'), fetch('lighthouse_data.json'), fetch('accessmonitor_data.json'), fetch('qualweb_data.json')])
       .then(results => {
         if(results[0] && results[0].status ==="fulfilled") {
           loadWaveData(results[0].value.json());
@@ -420,6 +665,18 @@
           loadLighthouseData(results[2].value.json());
         } else {
           console.error('Error fetching or parsing the lighthouse JSON file:', results[2]?.reason || 'Failed');
+        }
+
+        if(results[3] && results[3].status ==="fulfilled") {
+          loadAccessMonitorData(results[3].value.json());
+        } else {
+          console.error('Error fetching or parsing the Access Monitor JSON file:', results[3]?.reason || 'Failed');
+        }
+
+        if(results[4] && results[4].status ==="fulfilled") {
+          loadQualWebData(results[4].value.json());
+        } else {
+          console.error('Error fetching or parsing the Qual Web JSON file:', results[4]?.reason || 'Failed');
         }
 
         hideLoader();

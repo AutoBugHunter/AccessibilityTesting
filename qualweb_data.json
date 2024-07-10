@@ -1,0 +1,26 @@
+{
+    " Form control has accessible name ": [
+        "\n<input type=\"text\" disabled=\"\" class=\"codeeditorbr-input\" value=\"www.w3schools.com/tryit/\">",
+        "\n<input type=\"text\" disabled=\"\" class=\"codeeditorbr-input\" value=\"www.w3schools.com/howto/\">"
+    ],
+    " iframe element has accessible name ": [
+        "\n<input type=\"text\" disabled=\"\" class=\"codeeditorbr-input\" value=\"www.w3schools.com/tryit/\">",
+        "\n<input type=\"text\" disabled=\"\" class=\"codeeditorbr-input\" value=\"www.w3schools.com/howto/\">"
+    ],
+    " Image has accessible name ": [
+        "\n<input type=\"text\" disabled=\"\" class=\"codeeditorbr-input\" value=\"www.w3schools.com/tryit/\">",
+        "\n<input type=\"text\" disabled=\"\" class=\"codeeditorbr-input\" value=\"www.w3schools.com/howto/\">"
+    ],
+    " Text has enhanced contrast ": [
+        "\n<input type=\"text\" disabled=\"\" class=\"codeeditorbr-input\" value=\"www.w3schools.com/tryit/\">",
+        "\n<input type=\"text\" disabled=\"\" class=\"codeeditorbr-input\" value=\"www.w3schools.com/howto/\">"
+    ],
+    " Text has minimum contrast ": [
+        "\n<input type=\"text\" disabled=\"\" class=\"codeeditorbr-input\" value=\"www.w3schools.com/tryit/\">",
+        "\n<input type=\"text\" disabled=\"\" class=\"codeeditorbr-input\" value=\"www.w3schools.com/howto/\">"
+    ],
+    " Visible label is part of accessible name ": [
+        "\n<input type=\"text\" disabled=\"\" class=\"codeeditorbr-input\" value=\"www.w3schools.com/tryit/\">",
+        "\n<input type=\"text\" disabled=\"\" class=\"codeeditorbr-input\" value=\"www.w3schools.com/howto/\">"
+    ]
+}

@@ -15,7 +15,7 @@ app.use((req,res,next) => {
 });
 
 app.get('/npm', async (req, res) => {
-    const x = await exec('npx playwright test AChecker.spec.ts Lighthouse.spec.ts Wave.spec.ts');
+    const x = await exec('npx playwright test AChecker.spec.ts Lighthouse.spec.ts Wave.spec.ts AccessMonitor.spec.ts QualWeb.spec.ts');
     res.send({val:"Success"});
 });
 

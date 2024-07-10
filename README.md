@@ -1,10 +1,11 @@
 # AccessibilityTesting
 To run single file from local : 
 1. npx playwright test "spec_file" --headed 
+
     ![Screenshot](images/Terminal2.png)
 
 To run from browser follow below steps:
-1. node app.js  (To start server).
+1.  node app.js (To start server).
 
     ![Screenshot](images/Terminal1.png)
 
